@@ -8,7 +8,7 @@ Usage:
 	$string1 = 'This is my test string';
 	$string2 = 'This is my second text string';
 	require('string_compare.inc.php');
-	$phpStringCompare = new StringCompare($string1, $string2);
+	$phpStringCompare = new StringCompare($string1, $string2, array('remove_html_tags'=>false, 'remove_extra_spaces'=>true));
 	$percent = $phpStringCompare->getSimilarityPercentage();
 	$percent2 = $phpStringCompare->getDifferencePercentage();
 	echo $string1.' and '.$string2 are '.$percent.'% similar and '.$percent2.'% differnt';

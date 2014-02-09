@@ -2,7 +2,7 @@
 /**
  * This class compares two strings and outputs the similarities  as percentage
  *
- *@author Avtandil Kikabidze aka LONGMAN <akalongman@gmail.com>
+ * @author Avtandil Kikabidze aka LONGMAN <akalongman@gmail.com>
  */
 class StringCompare
 {
@@ -12,6 +12,12 @@ class StringCompare
 	private $_words2 = array();
 	private $_percent = null;
 
+	// remove extra spaces, tabs and new lines
+	private $_remove_extra_spaces = true;
+
+	// remove html tags
+	private $_remove_html_tags = true;
+
 	/**
 	 *Contructor function
 	 *
@@ -19,12 +25,30 @@ class StringCompare
 	 *@param string $str2
 	 *@return string
 	 */
-	public function __construct($str1, $str2)
+	public function __construct($str1, $str2, $params = array())
 	{
-		$this->_str1 = trim($str1);
-		$this->_str2 = trim($str2);
-		$this->_words1 = explode(' ', $this->_str1);
-		$this->_words2 = explode(' ', $this->_str2);
+		$str1 = trim($str1);
+		$str2 = trim($str2);
+
+		if (!empty($params['remove_html_tags'])) {
+			$this->_remove_html_tags = $params['remove_html_tags'];
+		}
+
+		if (!empty($params['remove_extra_spaces'])) {
+			$this->_remove_extra_spaces = $params['remove_html_tags'];
+		}
+
+		if ($this->_remove_html_tags) {
+			$str1 = strip_tags($str1);
+			$str2 = strip_tags($str2);
+		}
+
+		if ($this->_remove_extra_spaces) {
+			$str1 = preg_replace('#\s+#u', ' ', $str1);
+			$str2 = preg_replace('#\s+#u', ' ', $str2);
+		}
+		$this->_words1 = explode(' ', $str1);
+		$this->_words2 = explode(' ', $str2);
 	}
 
 	/**
