@@ -18,6 +18,13 @@ class StringCompare
 	// remove html tags
 	private $_remove_html_tags = true;
 
+	// remove punctuation symbols
+	private $_remove_punctuation = true;
+
+	// punctuation symbols
+	private $_punctuation_symbols = array('.', ',', '/', '-', '$', '*', ':', ';', '!', '?', '|', '\\', '_', '<', '>', '#', '~', '"', '\'', '^', '(', ')', '=', '+');
+
+
 	/**
 	 *Contructor function
 	 *
@@ -27,9 +34,6 @@ class StringCompare
 	 */
 	public function __construct($str1, $str2, $params = array())
 	{
-		$str1 = trim($str1);
-		$str2 = trim($str2);
-
 		if (!empty($params['remove_html_tags'])) {
 			$this->_remove_html_tags = $params['remove_html_tags'];
 		}
@@ -38,15 +42,34 @@ class StringCompare
 			$this->_remove_extra_spaces = $params['remove_html_tags'];
 		}
 
+		if (!empty($params['remove_punctuation'])) {
+			$this->_remove_punctuation = $params['remove_punctuation'];
+		}
+
+		if (!empty($params['punctuation_symbols'])) {
+			$this->_punctuation_symbols = $params['punctuation_symbols'];
+		}
+
+
+
 		if ($this->_remove_html_tags) {
 			$str1 = strip_tags($str1);
 			$str2 = strip_tags($str2);
+		}
+
+
+		if ($this->_remove_punctuation && count($this->_punctuation_symbols)) {
+			$str1 = str_replace($this->_punctuation_symbols, '', $str1);
+			$str2 = str_replace($this->_punctuation_symbols, '', $str2);
 		}
 
 		if ($this->_remove_extra_spaces) {
 			$str1 = preg_replace('#\s+#u', ' ', $str1);
 			$str2 = preg_replace('#\s+#u', ' ', $str2);
 		}
+
+		$this->_str1 = $str1 = trim($str1);
+		$this->_str2 = $str2 = trim($str2);
 		$this->_words1 = explode(' ', $str1);
 		$this->_words2 = explode(' ', $str2);
 	}
